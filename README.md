@@ -15,7 +15,7 @@ model, a folder with data in SEG-Y format. A table with the data on which the tr
 opens in order to initialize normalization (if it is specified that it was applied when
 learning). The output is SEGY with the prediction result
 
-##Parameter file Keys:
+## Parameter file Keys:
 
 1) ```Mode``` - the mode of operation of the program, can be ```Learn``` or ```Predict```
 
