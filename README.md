@@ -1,7 +1,9 @@
 # SKLEARNER v. 0.3
 
 ```git clone https://github.com/sergeevsn/sklearner.git```
+
 ```pip install -r requirements.txt```
+
 ```python sklearner.py <mode> <parameters>```
 
 There is a test data along with parameters file in folder ```test_data```, you can try like this:
