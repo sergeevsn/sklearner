@@ -64,9 +64,14 @@ def error_msg(msg):
 
 class SklearnerBase:    
 
-    def __init__(self, fname) -> None:  
-        self.params_file_name = fname    
-        self.params = None           
+    def __init__(self) -> None:  
+           
+        self.params = None       
+        self.table = None    
+        self.data_file_name = ""
+        self.feature_columns = []
+        self.target_column = ""
+        self.well_column = ""
         self.scaler_x = None
         self.scaler_y = None
         self.X_data = None
@@ -74,14 +79,15 @@ class SklearnerBase:
         self.split_mode = "NoSplit"
         self.wells = []
         self.regressor = None
+        
 
-    def read_params(self, mode):    
+    def read_params(self, params_file_name, mode):    
         try:
-            f = open(self.params_file_name)
+            f = open(params_file_name)
             params = json.load(f)
             f.close()
         except:
-            error_msg(f'Cannot read parameters file {self.params_file_name}!')    
+            error_msg(f'Cannot read parameters file {params_file_name}!')    
             sys.exit()
         
         if mode == 'learn':
@@ -96,56 +102,38 @@ class SklearnerBase:
             print(f'Difference: {set(params.keys())-check_keys}')
         self.params = params
 
-    def read_learning_table(self):
-        
-        if self.params['LearnDataFile'].endswith('.xlsx'):
+    def read_learning_table(self, data_file_name):        
+
+        if data_file_name.endswith('.xlsx'):
             try:
-                learn_df = pd.read_excel(self.params['LearnDataFile']).dropna()
+                learn_df = pd.read_excel(data_file_name).dropna()
             except:
-                error_msg(f"Cannot read Excel file {self.params['LearnDataFile']}!")    
-                sys.exit()
+                error_msg(f"Cannot read Excel file {data_file_name}!")    
+                return False
         else:    
             try:
-                learn_df = pd.read_csv(self.params['LearnDataFile']).dropna()
+                learn_df = pd.read_csv(data_file_name).dropna()
             except:
-                error_msg(f"Cannot read CSV file {self.params['LearnDataFile']}!")    
-                sys.exit()
+                error_msg(f"Cannot read CSV file {data_file_name}!")    
+                return False            
+            
+        self.data_file_name = data_file_name    
                          
         if len(learn_df.columns) < 3:
             error_msg('At least 3 columns must be present in the table!')
-            sys.exit()
+            return False
         if len(learn_df.columns) < 2:
             error_msg('At least 2 rows must be present in the data!')
-            sys.exit()
-        feature_columns = self.params['FeatureColumns']
-        target_column = self.params['TargetColumn'] 
-        well_column = self.params['WellColumn']      
-     
-        if not well_column in learn_df.columns:
-            error_msg('There is no specified well column in the table')    
-            sys.exit()    
-        if not target_column in learn_df.columns:
-            error_msg('There is no specified target column in the table')    
-            sys.exit()     
-        if not set(feature_columns).issubset(set(learn_df.columns)):
-            error_msg('There are no specified features columns in the table!')    
-            print(f'Table columns: {set(learn_df.columns)}')
-            sys.exit()
-        split_mode = self.params['TrainTestSplitMode']    
-        if not split_mode in SPLITMODES:
-            error_msg(f'TrainTestSplitMode must be of these: {SPLITMODES}!')    
-            sys.exit()    
-
-        self.X_data = learn_df[[well_column] + feature_columns]
-        self.y_data = learn_df[[well_column, target_column]]
-        self.split_mode = split_mode
-        self.wells = pd.unique(learn_df[well_column])
+            return False        
+        
+        self.table = learn_df
+        return True
 
 class SklearnerLearn(SklearnerBase):
 
-    def __init__(self, fname) -> None:
-        super().__init__(fname)
-        super().read_params(mode="learn")
+    def __init__(self) -> None:
+        super().__init__()
+       #super().read_params(mode="learn")
         self.scaled_X_data = None
         self.scaled_y_data = None        
         self.predicted_data = None
