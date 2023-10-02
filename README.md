@@ -73,7 +73,6 @@ and RMSE metrics
 12. ```ModelFile``` - a file with a trained model. In the Learn mode, the learning result is recorded there, and in
 the Predict mode, the trained model is read from there for prediction
 
-11) ```FeatureFolder``` - a folder with files containing signs by which a prediction will be made
+13. ```FeatureFolder``` - a folder with files containing signs by which a prediction will be made
 in the Predict mode. There is a separate file for each attribute
 
-12) ```DataFormat``` - the format of the feature files and the prediction result file for the Predict mode. So far, only "SEGY" is supported
