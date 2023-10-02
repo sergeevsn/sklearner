@@ -66,13 +66,15 @@ Empty parameters mean default initialization.
 - ```MaxAbs``` (MaxAbsScaler)
 - ```Robust``` (RobustScaler)
 
-11. ```TestResultFile``` - a file with the prediction results on the test sample. It is written as a
+11. ```TestResultFile``` - file name for the prediction results on the test sample. It is written as a
 csv or excel table with columns: Truth, Prediction, R2, RMSE - true value, prediction, R2
 and RMSE metrics
 
-12. ```ModelFile``` - a file with a trained model. In the Learn mode, the learning result is recorded there, and in
+12. ```ModelFile``` - file name for a trained model. In the Learn mode, the learning result is recorded there, and in
 the Predict mode, the trained model is read from there for prediction
 
-13. ```FeatureFolder``` - a folder with files containing signs by which a prediction will be made
+13. ```PredictResultFile``` - file name for a predicted target in ```predict``` mode, file in SEG-Y format
+
+14. ```FeatureFolder``` - a folder with files containing features in the SEG-Y format for the prediction 
 in the Predict mode. There is a separate file for each attribute
 
